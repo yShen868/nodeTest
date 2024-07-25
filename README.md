@@ -1,0 +1,2 @@
+# nodeTest
+node wx 
