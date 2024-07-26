@@ -11,6 +11,8 @@ const apiRoutes = require('./routes/api');
 app.use('/api', apiRoutes);
 const changeRoutes = require('./routes/change');
 app.use('/change', changeRoutes);
+const stepsRouter = require('./routes/steps');
+app.use('/api/steps', stepsRouter);
 
 // 统一错误处理
 app.use((err, req, res, next) => {
@@ -24,11 +26,11 @@ app.use((err, req, res, next) => {
 
 // 设置基本路由
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+    res.send('Hello World!');
 });
 
 app.get('/test', (req, res) => {
-  res.send('test!');
+    res.send('test!');
 });
 
 // 监听未捕获的Promise拒绝
@@ -41,3 +43,4 @@ process.on('unhandledRejection', (reason, promise) => {
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+

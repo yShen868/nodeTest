@@ -6,6 +6,7 @@ const ResponseFactory = require('../models/response');
 const getUser = (req, res, next) => {
     try {
         const userData = userService.getUserData();
+        console.log('getUser')
         res.json(ResponseFactory.success(userData));
     } catch (err) {
         next(err);

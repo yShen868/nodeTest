@@ -1,14 +1,14 @@
 // src/routes/api.js
 
 const express = require('express');
+const {simpleChange, getToken, motionRunner} = require("../services/changeService");
 const router = express.Router();
-const changeController = require('../controllers/changeController');
 
 // 定义用户路由
-router.get('/simpleChange', changeController.simpleChange)
-    .post('/simpleChange', changeController.simpleChange)
-    .get('/getToken', changeController.getToken)
-    .get('/motionRunner', changeController.motionRunner)
+router.get('/simpleChange', simpleChange)
+    .post('/simpleChange', simpleChange)
+    .get('/getToken', getToken)
+    .get('/motionRunner', motionRunner)
 ;
 
 module.exports = router;

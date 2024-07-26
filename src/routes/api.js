@@ -1,10 +1,10 @@
 // src/routes/api.js
 
 const express = require('express');
+const {getUser} = require("../controllers/userController");
 const router = express.Router();
-const userController = require('../controllers/userController');
 
 // 定义用户路由
-router.get('/user', userController.getUser);
+router.get('/user', getUser);
 
 module.exports = router;
