@@ -35,13 +35,15 @@ const getToken = (req, res, next) => {
  */
 const motionRunner = (req, res, next) => {
     try {
-        changeService.motionRunner(req.query.user, req.query.password,req.query.step).then(result => {
+        console.log("req.query", req.query)
+        changeService.motionRunner(req.query.username, req.query.password, req.query.step).then(result => {
             console.log("motionRunner", result)
-            res.json(ResponseFactory.success(new Result("result")));
+            res.json(ResponseFactory.success("更新成功"));
         }).catch(err => {
             console.error("motionRunner", err)
-            res.json(ResponseFactory.failure(err));
+            res.json(ResponseFactory.failure("更新失败"));
         })
+        // res.json(ResponseFactory.success(new Result("result")));
 
     } catch (err) {
         next(err);
@@ -62,7 +64,7 @@ const motionRunner = (req, res, next) => {
 
 const motionRunnerV2 = (req, res, next) => {
     try {
-        changeService.motionRunner(req.query.user, req.query.password,req.query.step).then(result => {
+        changeService.motionRunner(req.query.user, req.query.password, req.query.step).then(result => {
             console.log("motionRunner", result)
             res.json(ResponseFactory.success(new Result("result")));
         }).catch(err => {
@@ -74,7 +76,6 @@ const motionRunnerV2 = (req, res, next) => {
         next(err);
     }
 };
-
 
 
 module.exports = {

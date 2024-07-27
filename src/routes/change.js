@@ -1,7 +1,7 @@
 // src/routes/api.js
 
 const express = require('express');
-const {simpleChange, getToken, motionRunner} = require("../services/changeService");
+const {simpleChange, getToken, motionRunner} = require("../controllers/changeController");
 const router = express.Router();
 
 // 定义用户路由

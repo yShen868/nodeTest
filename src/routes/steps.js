@@ -1,6 +1,7 @@
 // routes/steps.js
 const express = require('express');
 const {Step: Steps} = require('../models/stepIndex');
+const ResponseFactory = require("../models/response");
 const router = express.Router();
 
 
@@ -19,7 +20,8 @@ function convertRuleFormToStep(ruleForm) {
         timeEnd: getArrayValue(ruleForm.timeRange, 1),
         dateStart: getArrayValue(ruleForm.dateRange, 0),
         dateEnd: getArrayValue(ruleForm.dateRange, 1),
-        weekDay: ruleForm.selectedDays != null ? ruleForm.selectedDays.join(',') : null
+        weekDay: ruleForm.selectedDays != null ? ruleForm.selectedDays.join(',') : null,
+        enable: ruleForm.enable
     };
 }
 
@@ -39,23 +41,26 @@ function convertStepToRuleForm(step) {
             step.dateStart,
             step.dateEnd
         ],
-        selectedDays: step.weekDay != null ? step.weekDay.split(',') : []
+        selectedDays: step.weekDay != null ? step.weekDay.split(',') : [],
+        enable: step.enable
     };
 }
 
 function validateStepData(stepData) {
     const errors = {};
 
-    if (!stepData.user) {
-        errors.user = '账号不能为空';
+    if (stepData.user === undefined || !stepData.user) {
+        errors.message = '账号不能为空';
+        return errors;
     }
 
-    if (!stepData.password) {
-        errors.password = '密码不能为空';
+    if (stepData.password === undefined || !stepData.password) {
+        errors.message = '密码不能为空';
+        return errors;
     }
 
-    if (!stepData.step_start || !stepData.step_end) {
-        errors.step = '步数范围不能为空';
+    if (stepData.stepStart === undefined || stepData.stepEnd === undefined || !stepData.stepStart || !stepData.stepEnd) {
+        errors.message = '步数范围不能为空';
     }
 
     return errors;
@@ -65,11 +70,35 @@ router.post('/create', async (req, res) => {
     try {
         console.log(req.body)
         let stepBody = convertRuleFormToStep(req.body)
-        validateStepData(stepBody)
-        const step = await Steps.create(stepBody);
-        res.status(201).json(convertStepToRuleForm(step));
+        console.log("stepBody", stepBody)
+        const err = validateStepData(stepBody)
+        if (err.message != null) {
+            res.status(500).json({error: err.message});
+        }
+        // 查询步骤表中是否存在已有的用户
+        const existingStep = await Steps.findOne({
+            attributes: ['user', 'password'], // 仅选择 user 和 password 字段
+            where: {
+                user: stepBody.user,
+                password: stepBody.password,
+                is_exist: 1
+            }
+        });
+
+        if (existingStep) {
+            // 更新现有记录
+            const upd = await existingStep.update(stepBody);
+            console.log("create upd", upd)
+            return ResponseFactory.success('更新成功');
+        } else {
+            const step = await Steps.create(stepBody);
+        }
+
+
+        // res.status(201).json(convertStepToRuleForm(step));
+        res.status(200).json(ResponseFactory.success("保存成功"));
     } catch (error) {
-        res.status(500).json({error: error.message});
+        res.status(500).json(ResponseFactory.failure("保存失败"));
     }
 });
 

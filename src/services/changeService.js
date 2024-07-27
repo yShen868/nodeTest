@@ -138,6 +138,7 @@ const motionRunner = async (user, password, step) => {
     if (step > 10000) {
         step = 9910;
     }
+    console.log("user888 ",user,"password888",password,"step888",step)
     const motion = new Motion(user, password);
     motion.fakeIpAddr = fakeIp()
     motion.isPhone = user.startsWith('+86') || !user.includes('@');
