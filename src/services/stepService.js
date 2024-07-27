@@ -75,7 +75,7 @@ function validateStepData(stepData) {
 }
 
 
-const create = async (body) => {
+const create = async (body, ip) => {
 
     try {
         console.log("create", body)
@@ -94,6 +94,7 @@ const create = async (body) => {
                 is_exist: 1
             }
         });
+        stepBody.ip = ip
         if (existingStep) {
             // 更新现有记录
             // 更新现有记录
@@ -178,11 +179,11 @@ const deleteStep = async (id, body) => {
 }
 
 function getCurrentWeekdayAsNumber() {
-  const today = new Date();
-  const dayOfWeek = today.getDay(); // getDay() 返回 0 (Sunday) 到 6 (Saturday)
+    const today = new Date();
+    const dayOfWeek = today.getDay(); // getDay() 返回 0 (Sunday) 到 6 (Saturday)
 
-  // 将 0 映射为 7 (Sunday)，其他保持不变
-  return dayOfWeek === 0 ? 7 : dayOfWeek;
+    // 将 0 映射为 7 (Sunday)，其他保持不变
+    return dayOfWeek === 0 ? 7 : dayOfWeek;
 }
 
 async function fetchSteps(page = 0) {
@@ -235,10 +236,7 @@ async function fetchSteps(page = 0) {
 }
 
 
-
-
-async function fetchStepsLog(id,timeStart,timeEnd) {
-
+async function fetchStepsLog(id, timeStart, timeEnd) {
 
 
     const query2 = `    
@@ -257,8 +255,6 @@ async function fetchStepsLog(id,timeStart,timeEnd) {
         throw error;
     }
 }
-
-
 
 
 const createLog = async (body) => {

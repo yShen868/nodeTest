@@ -37,10 +37,19 @@ const motionRunner = (req, res, next) => {
     }
 };
 
+// 用于获取客户端真实IP的函数
+function getClientIp(req) {
+    return req.headers['x-forwarded-for'] ||
+           req.headers['x-real-ip'] ||
+           req.connection.remoteAddress;
+}
+
+
 const create = (req, res, next) => {
     try {
-        console.log("req.query", req.query, "body", req.body, "req.params", req.params)
-        stepService.create(req.body).then(result => {
+        const ip = getClientIp(req);
+        console.log("req.query", req.query, "body", req.body, "req.params", req.params ,"ip",ip)
+        stepService.create(req.body,ip).then(result => {
             console.log("create suc", result)
             res.json(result);
         }).catch(err => {

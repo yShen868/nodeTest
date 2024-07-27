@@ -72,6 +72,12 @@ module.exports = (sequelize, DataTypes) => {
             field: "enable",
             allowNull: true,
             comment: '是否启用'
+        },
+        ip: {
+            type: DataTypes.STRING(32),
+            field: "ip",
+            allowNull: true,
+            comment: 'ip'
         }
     }, {
         tableName: 'step',
