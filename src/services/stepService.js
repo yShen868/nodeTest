@@ -106,6 +106,7 @@ const create = async (body) => {
         // res.status(201).json(convertStepToRuleForm(step));
         return ResponseFactory.success("保存成功");
     } catch (error) {
+        console.log(error)
         return ResponseFactory.failure("保存失败");
     }
 }
@@ -176,6 +177,13 @@ const deleteStep = async (id, body) => {
     }
 }
 
+function getCurrentWeekdayAsNumber() {
+  const today = new Date();
+  const dayOfWeek = today.getDay(); // getDay() 返回 0 (Sunday) 到 6 (Saturday)
+
+  // 将 0 映射为 7 (Sunday)，其他保持不变
+  return dayOfWeek === 0 ? 7 : dayOfWeek;
+}
 
 async function fetchSteps(page = 0) {
     const limit = 100;
@@ -186,6 +194,7 @@ async function fetchSteps(page = 0) {
     const hours = String(now1.getHours()).padStart(2, '0');
     const minutes = String(now1.getMinutes()).padStart(2, '0');
 
+    const weekOfDay = getCurrentWeekdayAsNumber();
 
     const now = moment().format('YYYY-MM-DD HH:mm:ss');
 
@@ -200,6 +209,7 @@ async function fetchSteps(page = 0) {
             HOUR(a.time_start) =  ${hours} AND MINUTE(a.time_start) <=  ${minutes}
         )
       )
+      and (week_day is null or week_day = '' or week_day like '%${weekOfDay}%')
       AND (
         HOUR(a.time_end) > ${hours} OR (
             HOUR(a.time_end) = ${hours} AND MINUTE(a.time_end) >= ${minutes}

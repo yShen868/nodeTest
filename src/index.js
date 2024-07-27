@@ -45,7 +45,7 @@ app.get('/test', (req, res) => {
 process.on('unhandledRejection', (reason, promise) => {
     console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
-
+// 开启定时任务
 startTask();
 // 监听端口
 app.listen(port, () => {
