@@ -6,7 +6,7 @@ module.exports = {
         host: '8.130.106.155',
         port: 3306,
         dialect: 'mysql',
-        timezone: 'Z'  // UTC time zone
+        timezone: 'Asia/Shanghai'  // UTC time zone
 
     }
     // development: {
