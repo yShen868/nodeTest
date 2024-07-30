@@ -4,6 +4,7 @@ const moment = require("moment");
 const {randomInt} = require("crypto");
 const {motionRunner} = require("../services/changeService");
 
+const expression = '* * * * *';
 
 // 5秒 * * * * * */5  */10 * * * * *
 function realCornExec(i, hours, minutes) {
@@ -94,7 +95,7 @@ function realCornExec(i, hours, minutes) {
 function startTask() {
 
 
-    cron.schedule('*/10 * * * * *', () => {
+    cron.schedule(expression, () => {
         // 获取当前时间
         const now = new Date();
         const year = now.getFullYear();
