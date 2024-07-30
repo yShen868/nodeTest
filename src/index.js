@@ -1,11 +1,14 @@
+require('./config/config')();
 const express = require('express');
 const app = express();
 const port = 8085;
 const bodyParser = require('body-parser');
 app.use(express.urlencoded({extended: true}));
-const {startTask} = require('./corn/stepCorn')
 
-const {fetchSteps, createLog} = require('./services/stepService')
+
+const config = require("./config/database");
+console.log('当前环境3：', config)
+// console.log('DB Config:', dbConfig); // 添加这行以打印配置，确保环境变量已正确加载
 
 // 中间件
 app.use(bodyParser.json());
@@ -46,7 +49,7 @@ process.on('unhandledRejection', (reason, promise) => {
     console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
 // 开启定时任务
-startTask();
+// startTask();
 // 监听端口
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
