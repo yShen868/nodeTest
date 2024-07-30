@@ -248,12 +248,14 @@ function getEndOfToday() {
     const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
     return endOfToday;
 }
-
+function formatDate(date) {
+    return moment(date).format('YYYY-MM-DD HH:mm:ss');
+}
 async function fetchStepsLog(id, timeStart, timeEnd) {
 
     //
-    const start = getStartOfToday()
-    const end = getEndOfToday()
+    const start = formatDate(getStartOfToday());
+    const end = formatDate(getEndOfToday());
 
     const query2 = `    
     select * from step_log where step_id = ${id} and timeq > '${timeStart}' and timeq  < '${timeEnd}' and create_time < '${end}' and create_time > '${start}'  and is_exist = 1
