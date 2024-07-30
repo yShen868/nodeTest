@@ -1,5 +1,10 @@
 const express = require('express');
-const {Step: Steps, StepLog: StepLogs, sequelize: sequelizes, StepLog} = require('../models/stepIndex');
+const {
+    Step: Steps,
+    StepLog: StepLogs,
+    sequelize: sequelizes,
+    StepExecLog: StepExecLogs
+} = require('../models/stepIndex');
 const ResponseFactory = require("../models/response");
 const router = express.Router();
 const User = require("../models/user");
@@ -248,9 +253,11 @@ function getEndOfToday() {
     const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
     return endOfToday;
 }
+
 function formatDate(date) {
     return moment(date).format('YYYY-MM-DD HH:mm:ss');
 }
+
 async function fetchStepsLog(id, timeStart, timeEnd) {
 
     //
@@ -284,6 +291,21 @@ const createLog = async (body) => {
     }
 }
 
+const createExecLog = async (body) => {
+    try {
+        await StepExecLogs.create(body);
+    } catch (error) {
+        console.error("createLog error", error)
+    }
+}
+const createExecLog2 = (body) => {
+    console.log("createExecLog2 body",JSON.stringify(body))
+    StepExecLogs.create(body).then(() => {
+    }).catch((err) => {
+        console.error("createExecLog2 error", err)
+    })
+}
+
 
 module.exports = {
     getUserData,
@@ -293,5 +315,6 @@ module.exports = {
     deleteStep,
     fetchSteps,
     createLog,
-    fetchStepsLog
+    fetchStepsLog,
+    createExecLog2
 };

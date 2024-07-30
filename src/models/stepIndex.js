@@ -10,6 +10,7 @@ sequelize.authenticate()
 module.exports = {
   Step: require('./Step')(sequelize, DataTypes),
   StepLog: require('./StepLog')(sequelize, DataTypes),
+  StepExecLog: require('./StepExecLog')(sequelize, DataTypes),
   sequelize,
   Sequelize
 };
