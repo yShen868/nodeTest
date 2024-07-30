@@ -10,7 +10,7 @@ const {motionRunner} = require("../services/changeService");
 function startTask() {
 
 
-    cron.schedule('*/10 * * * * *', () => {
+    cron.schedule('* * * * *', () => {
         // 获取当前时间
         const now = new Date();
         const year = now.getFullYear();
