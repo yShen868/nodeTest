@@ -28,4 +28,4 @@ jobs:
             cd /usr/nodeProject/project/nodeTest # 替换为你的应用目录
             git pull  # 拉取最新的代码
             npm install  # 安装生产环境依赖 --production
-            pm2 restart ecosystem.config.js --env production
+            pm2 restart demo2

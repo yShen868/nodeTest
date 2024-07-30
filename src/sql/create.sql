@@ -29,45 +29,19 @@ create table step_log
 );
 
 
-
-docker run --name node-mysql -p 4011:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql
 docker run --name node-mysql2 -p 4022:3306 -e MYSQL_ROOT_PASSWORD=123456 -e TZ=Asia/Shanghai -d mysql:8
 
 
-nginx config
-
-在 CentOS 上安装 Nginx 后，你可以找到以下主要目录和文件：
-
-安装目录:
-Nginx 的主安装目录通常是 /usr/share/nginx/。
-Nginx 的二进制文件位于 /usr/sbin/nginx。
-配置文件:
-主要的 Nginx 配置文件通常位于 /etc/nginx/nginx.conf。
-另外，你可能会看到 /etc/nginx/conf.d/ 目录，这里可以存放额外的配置文件。
-虚拟主机配置文件通常位于 /etc/nginx/conf.d/ 或 /etc/nginx/sites-enabled/ （虽然在 CentOS 中默认可能只使用 conf.d/）。
-日志文件:
-Nginx 的访问日志通常位于 /var/log/nginx/access.log。
-错误日志通常位于 /var/log/nginx/error.log。
-网站根目录:
-默认情况下，Nginx 的网站根目录是 /usr/share/nginx/html。这个目录用于存放网站的 HTML 文件和其他资源。
-
 sudo ln -s /etc/nginx/sites-available/wxproject /etc/nginx/sites-enabled/
 
+// 软链
 sudo ln -s /usr/nodeProject/project/wxProject /usr/share/nginx/
-服务管理命令:
-你可以使用 systemctl 命令来管理 Nginx 服务：
+
 启动 Nginx: sudo systemctl start nginx
 停止 Nginx: sudo systemctl stop nginx
 重启 Nginx: sudo systemctl restart nginx
 检查 Nginx 服务状态: sudo systemctl status nginx
-使 Nginx 在系统启动时自动启动: sudo systemctl enable nginx
-配置测试:
-在修改 Nginx 配置后，可以通过 sudo nginx -t 命令来检查配置文件是否有语法错误。
-如果一切正常，你可以使用 sudo systemctl reload nginx 或 sudo service nginx reload 来重新加载配置而无需重启整个服务。
 
-重启 sudo systemctl restart mysqld
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'0.0.0.0' IDENTIFIED BY 'yue123!@KAI' WITH GRANT OPTION;
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'221.217.9.229' IDENTIFIED BY 'yue123!@KAI' WITH GRANT OPTION;
 安装 MySQL 服务器:
 Bash
 深色版本
@@ -82,13 +56,20 @@ Bash
 深色版本
 sudo systemctl status mysqld
 
-密码 yue123!@KAI
 
+update user set host = '%' where user = 'root';
 
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'yue123!@KAI' WITH GRANT OPTION;
+// 修改密码
+ALTER USER 'root'@'%' IDENTIFIED BY 'yue123!@KAI';
 
+// 修改远程访问
+update mysql.user set host = '%' where user = 'root';
 
+select * from  mysql.user  where user = 'root';
+// 权限刷新
+flush privileges;
 
+// nginx 配置
     server {
        listen       8090;
        server_name 127.0.0.1; # 使用 localhost 或者 127.0.0.1 作为 server_name
@@ -116,3 +97,6 @@ GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'yue123!@KAI' WITH GRANT
             proxy_read_timeout 90;
         }
     }
+
+
+            pm2 restart ecosystem.config.js --env production
