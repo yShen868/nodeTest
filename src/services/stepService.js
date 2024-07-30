@@ -235,13 +235,30 @@ async function fetchSteps(page = 0) {
     }
 }
 
+// 获取今天的开始时间
+function getStartOfToday() {
+    const now = new Date();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+    return startOfToday;
+}
+
+// 获取今天的结束时间
+function getEndOfToday() {
+    const now = new Date();
+    const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+    return endOfToday;
+}
 
 async function fetchStepsLog(id, timeStart, timeEnd) {
 
+    //
+    const start = getStartOfToday()
+    const end = getEndOfToday()
 
     const query2 = `    
-    select * from step_log where step_id = ${id} and timeq > '${timeStart}' and timeq  < '${timeEnd}' and is_exist = 1
+    select * from step_log where step_id = ${id} and timeq > '${timeStart}' and timeq  < '${timeEnd}' and create_time < '${end}' and create_time > '${start}'  and is_exist = 1
     `;
+    console.log("fetchStepsLog ", query2)
     try {
         const results = await sequelizes.query(query2, {
             type: QueryTypes.SELECT,
