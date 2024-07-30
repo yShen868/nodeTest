@@ -51,7 +51,8 @@ function startTask() {
                                 step_id: a.id,
                                 step: stepRandom,
                                 success: 1,
-                                timeq: `${hours}:${minutes}`
+                                timeq: `${hours}:${minutes}`,
+                                create_time : moment().format('YYYY-MM-DD HH:mm:ss')
                             }
 
                             motionRunner(a.user, a.password, stepRandom).then(res => {
