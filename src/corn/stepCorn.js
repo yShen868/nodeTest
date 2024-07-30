@@ -147,7 +147,7 @@ function shouldExecute(data, execLogBody) {
     // 生成一个 [0, 1) 区间的随机数
     const randomNumber = randomInt(0, 10000) / 10000; // 生成一个0到1之间的随机浮点数
 
-    execLogBody.type3 = 1;
+    execLogBody.type3 = randomNumber < probability ? 0 : 1;
     // 比较随机数和概率
     return randomNumber < probability;
 }
