@@ -47,7 +47,7 @@ process.on('unhandledRejection', (reason, promise) => {
     console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
 // 开启定时任务
-// startTask();
+startTask();
 // 监听端口
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
