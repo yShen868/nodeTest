@@ -46,8 +46,12 @@ app.get('/test', (req, res) => {
 process.on('unhandledRejection', (reason, promise) => {
     console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
+
+console.log('当前环境：', process.env.NODE_ENV)
 // 开启定时任务
-startTask();
+if (process.env.NODE_ENV === 'production'){
+    startTask();
+}
 // 监听端口
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
