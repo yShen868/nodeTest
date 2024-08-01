@@ -2,7 +2,8 @@
 const express = require('express');
 const {Step: Steps} = require('../models/stepIndex');
 const ResponseFactory = require("../models/response");
-const {create, update, list, deleteStep} = require("../controllers/stepController");
+const {create, update, list, deleteStep, getStepLogs} = require("../controllers/stepController");
+const {post} = require("axios");
 const router = express.Router();
 
 
@@ -11,6 +12,7 @@ router.post('/create', create)
     .post('/update', update)
     .get('/list', list)
     .get('/delete', deleteStep)
+    .post('/getStepLogs', getStepLogs)
 ;
 
 

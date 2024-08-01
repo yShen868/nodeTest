@@ -88,6 +88,21 @@ const list = (req, res, next) => {
         next(err);
     }
 };
+
+const getStepLogs = (req, res, next) => {
+    try {
+        console.log("req.query", req.query, "body", req.body, "req.params", req.params)
+        stepService.getStepLogs(req.body,req.query.page).then(result => {
+            console.log("list suc", result)
+            res.json(result);
+        }).catch(err => {
+            console.error("list err", err)
+            res.status(500).json(ResponseFactory.failure("操作失败"));
+        })
+    } catch (err) {
+        next(err);
+    }
+};
 const deleteStep = (req, res, next) => {
     try {
         console.log("req.query", req.query, "body", req.body, "req.params", req.params)
@@ -109,5 +124,6 @@ module.exports = {
     create,
     list,
     update,
-    deleteStep
+    deleteStep,
+    getStepLogs
 };

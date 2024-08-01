@@ -20,11 +20,8 @@ app.use('/change', changeRoutes);
 const stepsRouter = require('./routes/steps');
 app.use('/api/steps', stepsRouter);
 const stepsRouterNew = require('./routes/stepsNew');
-const moment = require("moment/moment");
-const {randomInt} = require("crypto");
-const {motionRunner} = require("./services/changeService");
-const {startTask} = require("./corn/stepCorn");
 app.use('/api/stepsNew', stepsRouterNew);
+const {startTask} = require("./corn/stepCorn");
 
 // 统一错误处理
 app.use((err, req, res, next) => {
@@ -50,7 +47,7 @@ process.on('unhandledRejection', (reason, promise) => {
     console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
 // 开启定时任务
-startTask();
+// startTask();
 // 监听端口
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);

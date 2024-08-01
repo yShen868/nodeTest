@@ -11,6 +11,8 @@ const User = require("../models/user");
 const {json} = require("express");
 const {QueryTypes} = require('sequelize');
 const moment = require("moment");
+const momentTimezone = require('moment-timezone');
+const {log} = require("winston");
 
 const getUserData = () => {
     // 模拟获取用户数据
@@ -299,11 +301,68 @@ const createExecLog = async (body) => {
     }
 }
 const createExecLog2 = (body) => {
-    console.log("createExecLog2 body",JSON.stringify(body))
+    console.log("createExecLog2 body", JSON.stringify(body))
     StepExecLogs.create(body).then(() => {
     }).catch((err) => {
         console.error("createExecLog2 error", err)
     })
+}
+
+
+const getStepLogs = async (body, page) => {
+
+    try {
+        console.log("getStepLogs body", body)
+        const {user, password} = body;
+
+        if (!user || !password) {
+            return ResponseFactory.failure('账号密码不能为空');
+        }
+
+        // 查询步骤表中是否存在已有的用户
+        const existingStep = await Steps.findOne({
+            attributes: ['id', 'user', 'password'], // 仅选择 user 和 password 字段
+            where: {
+                user,
+                password,
+                is_exist: 1
+            }
+        });
+
+        if (!existingStep) {
+            return ResponseFactory.success({count: 0, rows: []}); // 如果没有数据，直接返回空数组
+        }
+        page = parseInt(page) || 1;
+        const limit = 5;
+        const offset = (page - 1) * limit;
+        const stepLogList = await StepLogs.findAndCountAll({
+            attributes: ['id', 'step', 'timeq', 'create_time', 'success'],
+            where: {
+                is_exist: 1,
+                user: body.user,
+
+            },
+            offset,
+            limit,
+            order: [['id', 'DESC']]
+        });
+        if (stepLogList.rows.length === 0) {
+            return ResponseFactory.success({count: 0, rows: []}); // 如果没有数据，直接返回空数组
+        }
+        const resRows = stepLogList.rows.map(row => {
+            const {create_time} = row.dataValues;
+            const createTime = moment.utc(create_time).tz('Asia/Shanghai').format('YYYY-MM-DD HH:mm:ss');
+            return {...row.dataValues, createTime};
+        });
+
+        console.log("getStepLogs stepLogList", JSON.stringify(resRows))
+        return ResponseFactory.success({count: stepLogList.count, rows: resRows});
+
+
+    } catch (error) {
+        console.log(error)
+        return ResponseFactory.failure("查询失败");
+    }
 }
 
 
@@ -316,5 +375,6 @@ module.exports = {
     fetchSteps,
     createLog,
     fetchStepsLog,
-    createExecLog2
+    createExecLog2,
+    getStepLogs
 };

@@ -7,9 +7,8 @@ module.exports = (sequelize, DataTypes) => {
             comment: '账号'
         },
         createTime: {
-            type: DataTypes.DATE,
+            type: DataTypes.STRING(32),
             field: "create_time",
-            defaultValue: DataTypes.NOW,
             allowNull: true,
             comment: '创建时间'
         },
